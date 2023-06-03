@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     QuizzList(
         name: 'Culture G : Espace',
         description:
-            'As-tu une bonne culture générale en Astronomie ? testes tes connaissances maintenant !'),
+            'As-tu une bonne culture générale en Astronomie ? Testes tes connaissances maintenant !'),
     QuizzList(
         name: 'Trouve le Pays !',
         description:
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
             appBar: AppBar(
               title: const Text('Quizz App !'),
               centerTitle: true,
-              backgroundColor: Color.fromARGB(255, 255, 174, 0),
+              backgroundColor: Color.fromARGB(255, 255, 166, 0),
             ),
             body: SingleChildScrollView(
               child: Center(
@@ -101,26 +101,37 @@ class _QuizzListChoiceState extends State<QuizzListChoice> {
         PageName.quizz,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
         child: Container(
           decoration: BoxDecoration(
-            color: const Color.fromARGB(57, 255, 145, 0),
-            borderRadius: BorderRadius.circular(60),
-          ),
+              color: const Color.fromARGB(60, 255, 166, 0),
+              borderRadius: BorderRadius.circular(60),
+              border: Border.all(
+                  style: BorderStyle.solid,
+                  color: const Color.fromARGB(200, 255, 166, 0))),
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 12,
           ),
-          child: Row(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(widget.name,
-                  style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.w600)),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(widget.description,
-                    style: const TextStyle(
-                        fontSize: 14, fontStyle: FontStyle.italic)),
+              Text(
+                widget.name,
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                widget.description,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontStyle: FontStyle.italic,
+                ),
               ),
             ],
           ),
