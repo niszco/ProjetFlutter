@@ -1,52 +1,128 @@
 import 'package:flutter/material.dart';
-import 'Pages.dart';
-import 'Quizz.dart';
-import 'QuizzList.dart';
 
 void main() => runApp(
       MyApp(),
     );
 
+class PageName {
+  static const String home = '/';
+  static const String quizz = '/quizz_game_page';
+}
+
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
-  final List<QuizzList> quizzList = [
-    QuizzList(name: 'Questionnaire 1', description: 'Questionnaire Star Wars'),
-    QuizzList(name: 'Questionnaire 2', description: 'Questionnaire Espace')
+  final quizzList = <QuizzList>[
+    // <== liste finale, contenu constant
+    QuizzList(
+        name: 'Culture Geek : Star Wars',
+        description: 'Connais-tu vraiment l\'univers de Star Wars ?'),
+    QuizzList(
+        name: 'Culture G : Espace',
+        description:
+            'As-tu une bonne culture générale en Astronomie ? testes tes connaissances maintenant !'),
+    QuizzList(
+        name: 'Trouve le Pays !',
+        description:
+            'Trouve le nom des pays correspondant aux drapeaux affichés !')
   ];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        brightness: Brightness.light,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.light,
-      ),
-      themeMode: ThemeMode.dark,
-      // initialRoute: Pages.home,
-      // routes: {
-      //   Pages.quizz: (context) => const Quizz(),
-      // },
-      home: ScaffoldMessenger(
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Quizz App !'),
-            centerTitle: true,
-            backgroundColor: const Color.fromARGB(255, 255, 179, 0),
-          ),
-          body: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [DisplayQuizz(quizzList: quizzList)],
-                  ),
-                ],
+        theme: ThemeData(
+          // <== définit le thème Light
+          brightness: Brightness.light,
+        ),
+        darkTheme: ThemeData(
+          // <== définit le thème Dark
+          brightness: Brightness.light,
+        ),
+        themeMode: ThemeMode.dark,
+        home: ScaffoldMessenger(
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text('Quizz App !'),
+              centerTitle: true,
+              backgroundColor: Color.fromARGB(255, 255, 174, 0),
+            ),
+            body: SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                    ),
+                    for (int i = 0; i < quizzList.length; i++)
+                      QuizzListChoice(
+                        name: quizzList[i].name,
+                        description: quizzList[i].description,
+                      ),
+                  ],
+                ),
               ),
             ),
+          ),
+        ),
+        initialRoute: PageName.home,
+        routes: {
+          PageName.quizz: (context) => const QuizzGamePage(),
+        });
+  }
+}
+
+class QuizzList {
+  final String name;
+  final String description;
+
+  QuizzList({required this.name, required this.description});
+}
+
+class QuizzListChoice extends StatefulWidget {
+  const QuizzListChoice({
+    Key? key,
+    required this.name,
+    required this.description,
+  }) : super(key: key);
+
+  final String name;
+  final String description;
+
+  @override
+  State<QuizzListChoice> createState() => _QuizzListChoiceState();
+}
+
+class _QuizzListChoiceState extends State<QuizzListChoice> {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => Navigator.pushNamed(
+        context,
+        PageName.quizz,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(57, 255, 145, 0),
+            borderRadius: BorderRadius.circular(60),
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
+          child: Row(
+            children: [
+              Text(widget.name,
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.w600)),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(widget.description,
+                    style: const TextStyle(
+                        fontSize: 14, fontStyle: FontStyle.italic)),
+              ),
+            ],
           ),
         ),
       ),
@@ -54,26 +130,33 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class DisplayQuizz extends StatelessWidget {
-  final List<QuizzList> quizzList;
-
-  const DisplayQuizz({Key? key, required this.quizzList}) : super(key: key);
+class QuizzGamePage extends StatelessWidget {
+  const QuizzGamePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final quizzName = ModalRoute.of(context)!.settings.arguments as String;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Quizz App'),
+        title: const Text('Page détail'),
       ),
-      body: ListView.builder(
-        itemCount: quizzList.length,
-        itemBuilder: (context, index) {
-          final quizz = quizzList[index];
-          return ListTile(
-            title: Text(quizz.name),
-            subtitle: Text(quizz.description),
-          );
-        },
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Nom du Pokémon : $quizzName',
+              style: const TextStyle(fontSize: 24),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Retour'),
+            ),
+          ],
+        ),
       ),
     );
   }
