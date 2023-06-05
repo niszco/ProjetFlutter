@@ -1,92 +1,261 @@
 import 'package:flutter/material.dart';
-import 'Pages.dart';
-import 'Quizz.dart';
-import 'QuizzList.dart';
+import 'package:myapp/QuizzData.dart' as quizzData;
 
-void main() => runApp(
-      MyApp(),
-    );
+class QuizzGamePage extends StatelessWidget {
+  final String quizzName;
+  final List<Question> questions;
 
-class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
-
-  final List<QuizzList> quizzList = [
-    QuizzList(name: 'Questionnaire 1', description: 'Questionnaire Star Wars'),
-    QuizzList(name: 'Questionnaire 2', description: 'Questionnaire Espace')
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        brightness: Brightness.light,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.light,
-      ),
-      themeMode: ThemeMode.dark,
-      // initialRoute: Pages.home,
-      // routes: {
-      //   Pages.quizz: (context) => const Quizz(),
-      // },
-      home: ScaffoldMessenger(
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Quizz App !'),
-            centerTitle: true,
-            backgroundColor: const Color.fromARGB(255, 255, 179, 0),
-          ),
-          body: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (int i = 0; i < quizzList.length; i++)
-                        DisplayQuizz(
-                            name: quizzList[i], description: quizzList[i]),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class DisplayQuizz extends StatelessWidget {
-  final List<QuizzList> quizzList = [
-    QuizzList(name: 'Questionnaire 1', description: 'Questionnaire Star Wars'),
-    QuizzList(name: 'Questionnaire 2', description: 'Questionnaire Espace')
-  ];
-
-  var name;
-
-  var description;
-
-  DisplayQuizz({Key? key, required this.name, required this.description})
-      : super(key: key);
+  QuizzGamePage({
+    required this.quizzName,
+    required this.questions,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Quizz App'),
+        title: Text(quizzName),
+        titleTextStyle: const TextStyle(fontSize: 28, color: Colors.white),
+        backgroundColor: const Color.fromARGB(255, 255, 166, 0),
       ),
-      body: ListView.builder(
-        itemCount: quizzList.length,
-        itemBuilder: (context, index) {
-          final quizz = quizzList[index];
-          return ListTile(
-            title: Text(quizz.name),
-            subtitle: Text(quizz.description),
-          );
-        },
-      ),
+      body: QuizzContent(questions: questions),
     );
   }
+}
+
+class QuizzContent extends StatefulWidget {
+  final List<Question> questions;
+
+  QuizzContent({required this.questions});
+
+  @override
+  _QuizzContentState createState() => _QuizzContentState();
+}
+
+class _QuizzContentState extends State<QuizzContent> {
+  int currentQuestionIndex = 0;
+  List<String> userResponses = [];
+
+  void selectAnswer(String answer) {
+    if (currentQuestionIndex >= widget.questions.length) {
+      return;
+    }
+
+    final question = widget.questions[currentQuestionIndex];
+
+    if (question is TextQuestion) {
+      if (answer == question.correctAnswer) {
+        userResponses.add(answer);
+      } else {
+        // Afficher un message d'erreur
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Mauvaise réponse !'),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    } else if (question is MultipleChoiceQuestion) {
+      if (answer == question.correctAnswer) {
+        userResponses.add(answer);
+      } else {
+        // Afficher un message d'erreur
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Mauvaise réponse !'),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    } else if (question is ImageQuestion) {
+      if (answer == question.correctAnswer) {
+        userResponses.add(answer);
+      } else {
+        // Afficher un message d'erreur
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Mauvaise réponse !'),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+
+    setState(() {
+      currentQuestionIndex++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (currentQuestionIndex >= widget.questions.length) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Félicitations, vous avez terminé le quizz !',
+              style: TextStyle(fontSize: 24),
+              textAlign: TextAlign.center,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Retour'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final question = widget.questions[currentQuestionIndex];
+
+    if (question is TextQuestion) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            question.text,
+            style: const TextStyle(fontSize: 24),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            onChanged: (response) => selectAnswer(response),
+            decoration: const InputDecoration(
+              hintText: 'Entrez votre réponse',
+              border: OutlineInputBorder(),
+              focusedBorder: OutlineInputBorder(
+                  borderSide:
+                      BorderSide(color: Color.fromARGB(255, 255, 166, 0))),
+            ),
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Retour'),
+          ),
+        ],
+      );
+    } else if (question is MultipleChoiceQuestion) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            question.text,
+            style: const TextStyle(fontSize: 24),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          Column(
+            children: question.choices.map((choice) {
+              return ElevatedButton(
+                onPressed: () {
+                  selectAnswer(choice);
+                },
+                child: Text(choice),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Retour'),
+          ),
+        ],
+      );
+    } else if (question is ImageQuestion) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            question.imagePath,
+            width: 200,
+            height: 200,
+          ),
+          const SizedBox(height: 20),
+          Column(
+            children: question.choices.map((choice) {
+              return ElevatedButton(
+                onPressed: () {
+                  selectAnswer(choice);
+                },
+                child: Text(choice),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Retour'),
+          ),
+        ],
+      );
+    }
+
+    return Container();
+  }
+}
+
+class Quizz {
+  final String name;
+  final List<Question> questions;
+
+  Quizz({required this.name, required this.questions});
+}
+
+abstract class Question {}
+
+class TextQuestion extends Question {
+  final String text;
+  final String correctAnswer;
+
+  TextQuestion(this.text, this.correctAnswer);
+}
+
+class MultipleChoiceQuestion extends Question {
+  final String text;
+  final List<String> choices;
+  final String correctAnswer;
+
+  MultipleChoiceQuestion(this.text, this.choices, this.correctAnswer);
+}
+
+class ImageQuestion extends Question {
+  final String imagePath;
+  final List<String> choices;
+  final String correctAnswer;
+
+  ImageQuestion(this.imagePath, this.choices, this.correctAnswer);
 }
