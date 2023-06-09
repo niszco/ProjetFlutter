@@ -5,7 +5,8 @@ class QuizzGamePage extends StatelessWidget {
   final String quizzName;
   final List<Question> questions;
 
-  QuizzGamePage({
+  const QuizzGamePage({
+    super.key,
     required this.quizzName,
     required this.questions,
   });
@@ -16,7 +17,7 @@ class QuizzGamePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(quizzName),
         titleTextStyle: const TextStyle(fontSize: 28, color: Colors.white),
-        backgroundColor: const Color.fromARGB(255, 255, 166, 0),
+        backgroundColor: const Color.fromARGB(255, 0, 53, 62),
       ),
       body: QuizzContent(questions: questions),
     );

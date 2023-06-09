@@ -60,8 +60,6 @@ class Quizz {
   Quizz({required this.name, required this.questions});
 }
 
-abstract class Question {}
-
 class TextQuestion extends Question {
   final String text;
   final String correctAnswer;
@@ -75,6 +73,14 @@ class MultipleChoiceQuestion extends Question {
   final String correctAnswer;
 
   MultipleChoiceQuestion(this.text, this.choices, this.correctAnswer);
+
+  bool checkAnswer(String userAnswer) {
+    if (userAnswer == correctAnswer) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 class ImageQuestion extends Question {
@@ -83,4 +89,12 @@ class ImageQuestion extends Question {
   final String correctAnswer;
 
   ImageQuestion(this.imagePath, this.choices, this.correctAnswer);
+
+  bool checkAnswer(String userAnswer) {
+    if (userAnswer == correctAnswer) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

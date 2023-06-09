@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+
 import 'QuizzData.dart';
 import 'QuizzList.dart';
 import 'Quizz.dart' as quizzData;
 import 'PagesRoutes.dart';
+import 'CongratulationsPage.dart';
 
 void main() => runApp(
       MyApp(),
@@ -40,84 +43,90 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.dark,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Quizz App !'),
-          titleTextStyle: const TextStyle(fontSize: 28, color: Colors.white),
-          centerTitle: true,
-          backgroundColor: const Color.fromARGB(255, 255, 166, 0),
-        ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                ),
-                for (int i = 0; i < quizzList.length; i++)
-                  Builder(
-                    builder: (context) => InkWell(
-                      onTap: () {
-                        String route = "";
-                        if (i == 0) {
-                          route = PagesRoutes.quizzStarWars;
-                        } else if (i == 1) {
-                          route = PagesRoutes.quizzEspace;
-                        } else if (i == 2) {
-                          route = PagesRoutes.quizzPays;
-                        }
-                        Navigator.pushNamed(
-                          context,
-                          route,
-                          arguments: quizzList[i].name,
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 12),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(60, 255, 166, 0),
-                            borderRadius: BorderRadius.circular(60),
-                            border: Border.all(
-                              style: BorderStyle.solid,
-                              color: const Color.fromARGB(200, 255, 166, 0),
-                            ),
-                          ),
+          appBar: AppBar(
+            title: const DefaultTextStyle(
+              style: TextStyle(
+                fontSize: 40,
+                color: Colors.white,
+                fontFamily: 'CoffeeCake',
+              ),
+              child: Text('Quizz App !'),
+            ),
+            centerTitle: true,
+            backgroundColor: const Color.fromARGB(255, 0, 53, 62),
+          ),
+          body: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                  ),
+                  for (int i = 0; i < quizzList.length; i++)
+                    Builder(
+                      builder: (context) => InkWell(
+                        onTap: () {
+                          String route = "";
+                          if (i == 0) {
+                            route = PagesRoutes.quizzStarWars;
+                          } else if (i == 1) {
+                            route = PagesRoutes.quizzEspace;
+                          } else if (i == 2) {
+                            route = PagesRoutes.quizzPays;
+                          }
+                          Navigator.pushNamed(
+                            context,
+                            route,
+                            arguments: quizzList[i].name,
+                          );
+                        },
+                        child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                quizzList[i].name,
-                                style: const TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color.fromARGB(255, 65, 65, 65),
-                                ),
+                              horizontal: 30, vertical: 15),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 0, 53, 62),
+                              borderRadius: BorderRadius.circular(40),
+                              border: Border.all(
+                                style: BorderStyle.solid,
+                                color: const Color.fromARGB(255, 0, 35, 41),
                               ),
-                              const SizedBox(height: 12),
-                              Text(
-                                quizzList[i].description,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontStyle: FontStyle.italic,
-                                  color: Color.fromARGB(255, 124, 124, 124),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  quizzList[i].name,
+                                  style: const TextStyle(
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                  ),
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 12),
+                                Text(
+                                  quizzList[i].description,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontStyle: FontStyle.italic,
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+          backgroundColor: const Color.fromARGB(178, 255, 255, 255)),
       initialRoute: PagesRoutes.home,
       routes: {
         PagesRoutes.quizzStarWars: (context) => QuizzGamePage(
@@ -131,6 +140,12 @@ class MyApp extends StatelessWidget {
                 TextQuestion("Quel est le nom complet de Dark Vador ?",
                     "Anakin Skywalker"),
               ],
+              onQuizzFinished: () {
+                Navigator.pushReplacementNamed(
+                  context,
+                  PagesRoutes.congratulations,
+                );
+              },
             ),
         PagesRoutes.quizzEspace: (context) => QuizzGamePage(
               quizzName: "Culture G : Espace",
@@ -166,6 +181,12 @@ class MyApp extends StatelessWidget {
                   "Neil Armstrong",
                 ),
               ],
+              onQuizzFinished: () {
+                Navigator.pushReplacementNamed(
+                  context,
+                  PagesRoutes.congratulations,
+                );
+              },
             ),
         PagesRoutes.quizzPays: (context) => QuizzGamePage(
               quizzName: "Trouve le Pays !",
@@ -186,6 +207,17 @@ class MyApp extends StatelessWidget {
                   "Japon",
                 ),
               ],
+              onQuizzFinished: () {
+                Navigator.pushReplacementNamed(
+                  context,
+                  PagesRoutes.congratulations,
+                );
+              },
+            ),
+        PagesRoutes.congratulations: (context) => CongratulationsPage(
+              onReturnPressed: () {
+                Navigator.pop(context);
+              },
             ),
       },
     );
@@ -200,6 +232,7 @@ class QuizzGamePage extends StatelessWidget {
     super.key,
     required this.quizzName,
     required this.questions,
+    required VoidCallback onQuizzFinished,
   });
 
   @override
@@ -207,8 +240,9 @@ class QuizzGamePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(quizzName),
-        titleTextStyle: const TextStyle(fontSize: 28, color: Colors.white),
-        backgroundColor: const Color.fromARGB(255, 255, 166, 0),
+        titleTextStyle: const TextStyle(
+            fontSize: 28, color: Colors.white, fontFamily: 'CoffeeCake'),
+        backgroundColor: const Color.fromARGB(255, 0, 53, 62),
       ),
       body: QuizzContent(questions: questions),
     );
@@ -227,12 +261,63 @@ class QuizzContent extends StatefulWidget {
 class _QuizzContentState extends State<QuizzContent> {
   int currentQuestionIndex = 0;
   List<String> userResponses = [];
+  String feedbackMessage = '';
+  Timer? feedbackTimer;
+  bool isQuizzFinished = false;
+  TextEditingController answerController = TextEditingController();
 
   void selectAnswer(String answer) {
-    setState(() {
+    final question = widget.questions[currentQuestionIndex];
+
+    if (question is MultipleChoiceQuestion || question is ImageQuestion) {
+      if (question.correctAnswer.contains(answer)) {
+        userResponses.add(answer);
+        currentQuestionIndex++;
+        feedbackMessage = '';
+        answerController.clear();
+      } else {
+        feedbackTimer = Timer(const Duration(seconds: 2), () {
+          setState(() {
+            feedbackMessage = 'Mauvaise réponse !';
+          });
+          Timer(const Duration(seconds: 2), () {
+            setState(() {
+              feedbackMessage = '';
+              currentQuestionIndex++;
+            });
+          });
+        });
+      }
+
+      if (feedbackTimer != null && feedbackTimer!.isActive) {
+        feedbackTimer!.cancel();
+      }
+      setState(() {
+        feedbackMessage = '';
+      });
+    } else {
       userResponses.add(answer);
       currentQuestionIndex++;
-    });
+    }
+
+    if (currentQuestionIndex >= widget.questions.length) {
+      isQuizzFinished = true;
+      feedbackMessage = 'Félicitations, vous avez terminé le quizz !';
+      userResponses.clear();
+      currentQuestionIndex = 0;
+
+      setState(() {
+        isQuizzFinished = true;
+        Navigator.pushReplacementNamed(context, PagesRoutes.congratulations);
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    feedbackTimer?.cancel();
+    answerController.dispose();
+    super.dispose();
   }
 
   @override
@@ -252,9 +337,10 @@ class _QuizzContentState extends State<QuizzContent> {
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 255, 166, 0),
+                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
               ),
-              child: const Text('Retour'),
+              child: const Text('Retour',
+                  style: TextStyle(color: Color.fromARGB(255, 0, 53, 62))),
             ),
           ],
         ),
@@ -274,22 +360,24 @@ class _QuizzContentState extends State<QuizzContent> {
           ),
           const SizedBox(height: 20),
           TextField(
-            onChanged: (response) => selectAnswer(response),
+            controller: answerController,
             decoration: const InputDecoration(
               hintText: 'Entrez votre réponse',
               border: OutlineInputBorder(),
             ),
+            onSubmitted: (response) {
+              selectAnswer(response);
+            },
           ),
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
+              selectAnswer(answerController.text);
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 255, 166, 0),
-            ),
-            child: const Text('Retour'),
+            child: const Text('Valider'),
           ),
+          const SizedBox(height: 20),
+          if (feedbackMessage.isNotEmpty) Text(feedbackMessage),
         ],
       );
     } else if (question is MultipleChoiceQuestion) {
@@ -309,9 +397,11 @@ class _QuizzContentState extends State<QuizzContent> {
                   selectAnswer(choice);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 255, 166, 0),
+                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                 ),
-                child: Text(choice),
+                child: Text(choice,
+                    style:
+                        const TextStyle(color: Color.fromARGB(255, 0, 53, 62))),
               );
             }).toList(),
           ),
@@ -321,9 +411,10 @@ class _QuizzContentState extends State<QuizzContent> {
               Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 255, 166, 0),
+              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
             ),
-            child: const Text('Retour'),
+            child: const Text('Retour',
+                style: TextStyle(color: Color.fromARGB(255, 0, 53, 62))),
           ),
         ],
       );
@@ -344,9 +435,12 @@ class _QuizzContentState extends State<QuizzContent> {
                   selectAnswer(choice);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 255, 166, 0),
+                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                 ),
-                child: Text(choice),
+                child: Text(
+                  choice,
+                  style: const TextStyle(color: Color.fromARGB(255, 0, 53, 62)),
+                ),
               );
             }).toList(),
           ),
@@ -356,9 +450,10 @@ class _QuizzContentState extends State<QuizzContent> {
               Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 255, 166, 0),
+              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
             ),
-            child: const Text('Retour'),
+            child: const Text('Retour',
+                style: TextStyle(color: Color.fromARGB(255, 0, 53, 62))),
           ),
         ],
       );
