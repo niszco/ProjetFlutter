@@ -161,7 +161,7 @@ class MyApp extends StatelessWidget {
                   "Jupiter",
                 ),
                 MultipleChoiceQuestion(
-                  "Quel est l'élément le plus commun dans l'Univers ?",
+                  "Quel est l'élément atomique le plus commun dans l'Univers ?",
                   ["Hélium", "Fer", "Oxygène", "Hydrogène"],
                   "Hydrogène",
                 ),
@@ -202,9 +202,34 @@ class MyApp extends StatelessWidget {
                   "Mexique",
                 ),
                 ImageQuestion(
-                  "assets/japan.png",
+                  "assets/japon.png",
                   ["Japon", "Chine", "Corée du Sud", "Thaïlande"],
                   "Japon",
+                ),
+                ImageQuestion(
+                  "assets/mongolie.png",
+                  ["Kazhakstan", "Ouzbekistan", "Mongolie", "Chine"],
+                  "Mongolie",
+                ),
+                ImageQuestion(
+                  "assets/vietnam.png",
+                  ["Laos", "Cambodge", "Myanmar", "Vietnam"],
+                  "Vietnam",
+                ),
+                ImageQuestion(
+                  "assets/nepal.png",
+                  ["Népal", "Inde", "Bangladesh", "Sri-Lanka"],
+                  "Népal",
+                ),
+                ImageQuestion(
+                  "assets/islande.png",
+                  ["Écosse", "Islande", "Pays de Galle", "Groënland"],
+                  "Islande",
+                ),
+                ImageQuestion(
+                  "assets/mozambique.png",
+                  ["Zimbabwe", "Angola", "Madagascar", "Mozambique"],
+                  "Mozambique",
                 ),
               ],
               onQuizzFinished: () {
@@ -270,7 +295,7 @@ class _QuizzContentState extends State<QuizzContent> {
     final question = widget.questions[currentQuestionIndex];
 
     if (question is MultipleChoiceQuestion || question is ImageQuestion) {
-      if (question.correctAnswer.contains(answer)) {
+      if ((question as dynamic).correctAnswer.contains(answer)) {
         userResponses.add(answer);
         currentQuestionIndex++;
         feedbackMessage = '';
@@ -302,7 +327,6 @@ class _QuizzContentState extends State<QuizzContent> {
 
     if (currentQuestionIndex >= widget.questions.length) {
       isQuizzFinished = true;
-      feedbackMessage = 'Félicitations, vous avez terminé le quizz !';
       userResponses.clear();
       currentQuestionIndex = 0;
 
@@ -355,7 +379,10 @@ class _QuizzContentState extends State<QuizzContent> {
         children: [
           Text(
             question.text,
-            style: const TextStyle(fontSize: 24),
+            style: const TextStyle(
+                fontSize: 24,
+                color: Color.fromARGB(255, 0, 53, 62),
+                fontWeight: FontWeight.w700),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
@@ -371,11 +398,16 @@ class _QuizzContentState extends State<QuizzContent> {
           ),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () {
-              selectAnswer(answerController.text);
-            },
-            child: const Text('Valider'),
-          ),
+              onPressed: () {
+                selectAnswer(answerController.text);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+              ),
+              child: const Text(
+                'Valider',
+                style: TextStyle(color: Color.fromARGB(255, 0, 53, 62)),
+              )),
           const SizedBox(height: 20),
           if (feedbackMessage.isNotEmpty) Text(feedbackMessage),
         ],
@@ -390,18 +422,31 @@ class _QuizzContentState extends State<QuizzContent> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
-          Column(
+          GridView.count(
+            crossAxisCount: 2, // Nombre de colonnes dans la grille
+            crossAxisSpacing: 4.0,
+            mainAxisSpacing: 4.0,
+            shrinkWrap: true,
             children: question.choices.map((choice) {
-              return ElevatedButton(
-                onPressed: () {
-                  selectAnswer(choice);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+              return Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    selectAnswer(choice);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  ),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      choice,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 0, 53, 62)),
+                    ),
+                  ),
                 ),
-                child: Text(choice,
-                    style:
-                        const TextStyle(color: Color.fromARGB(255, 0, 53, 62))),
               );
             }).toList(),
           ),
@@ -424,22 +469,34 @@ class _QuizzContentState extends State<QuizzContent> {
         children: [
           Image.asset(
             question.imagePath,
-            width: 200,
-            height: 200,
+            width: 225.0,
+            height: 150.0,
           ),
-          const SizedBox(height: 20),
-          Column(
+          const SizedBox(height: 10),
+          GridView.count(
+            crossAxisCount: 2, // Nombre de colonnes dans la grille
+            crossAxisSpacing: 4.0,
+            mainAxisSpacing: 4.0,
+            shrinkWrap: true,
             children: question.choices.map((choice) {
-              return ElevatedButton(
-                onPressed: () {
-                  selectAnswer(choice);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                ),
-                child: Text(
-                  choice,
-                  style: const TextStyle(color: Color.fromARGB(255, 0, 53, 62)),
+              return Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    selectAnswer(choice);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                  ),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      choice,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 0, 53, 62)),
+                    ),
+                  ),
                 ),
               );
             }).toList(),
@@ -458,6 +515,7 @@ class _QuizzContentState extends State<QuizzContent> {
         ],
       );
     }
+
     return Container(); // Retourne un conteneur vide si le type de question n'est pas pris en charge
   }
 }

@@ -60,6 +60,8 @@ class Quizz {
   Quizz({required this.name, required this.questions});
 }
 
+abstract class Question {}
+
 class TextQuestion extends Question {
   final String text;
   final String correctAnswer;

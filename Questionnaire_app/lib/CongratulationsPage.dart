@@ -35,11 +35,13 @@ class CongratulationsPage extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 255, 255, 255)),
             child: const Text(
               'Retour',
               style: TextStyle(
-                  color: Color.fromARGB(255, 0, 53, 62),
-                  backgroundColor: Colors.white),
+                color: Color.fromARGB(255, 0, 53, 62),
+              ),
             ),
           ),
         ],
