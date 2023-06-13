@@ -423,7 +423,7 @@ class _QuizzContentState extends State<QuizzContent> {
           ),
           const SizedBox(height: 20),
           GridView.count(
-            crossAxisCount: 2, // Nombre de colonnes dans la grille
+            crossAxisCount: 2,
             crossAxisSpacing: 4.0,
             mainAxisSpacing: 4.0,
             shrinkWrap: true,
@@ -443,7 +443,8 @@ class _QuizzContentState extends State<QuizzContent> {
                       choice,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                          color: Color.fromARGB(255, 0, 53, 62)),
+                        color: Color.fromARGB(255, 0, 53, 62),
+                      ),
                     ),
                   ),
                 ),
@@ -458,8 +459,10 @@ class _QuizzContentState extends State<QuizzContent> {
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color.fromARGB(255, 255, 255, 255),
             ),
-            child: const Text('Retour',
-                style: TextStyle(color: Color.fromARGB(255, 0, 53, 62))),
+            child: const Text(
+              'Retour',
+              style: TextStyle(color: Color.fromARGB(255, 0, 53, 62)),
+            ),
           ),
         ],
       );
