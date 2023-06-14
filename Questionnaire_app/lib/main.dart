@@ -286,43 +286,26 @@ class QuizzContent extends StatefulWidget {
 class _QuizzContentState extends State<QuizzContent> {
   int currentQuestionIndex = 0;
   List<String> userResponses = [];
-  String feedbackMessage = '';
-  Timer? feedbackTimer;
   bool isQuizzFinished = false;
   TextEditingController answerController = TextEditingController();
 
   void selectAnswer(String answer) {
     final question = widget.questions[currentQuestionIndex];
 
-    if (question is MultipleChoiceQuestion || question is ImageQuestion) {
+    if (question is TextQuestion) {
+      if (answer.toLowerCase().trim() ==
+          question.correctAnswer.toLowerCase().trim()) {
+        userResponses.add(answer);
+        currentQuestionIndex++;
+        answerController.clear();
+      }
+    } else if (question is MultipleChoiceQuestion ||
+        question is ImageQuestion) {
       if ((question as dynamic).correctAnswer.contains(answer)) {
         userResponses.add(answer);
         currentQuestionIndex++;
-        feedbackMessage = '';
         answerController.clear();
-      } else {
-        feedbackTimer = Timer(const Duration(seconds: 2), () {
-          setState(() {
-            feedbackMessage = 'Mauvaise réponse !';
-          });
-          Timer(const Duration(seconds: 2), () {
-            setState(() {
-              feedbackMessage = '';
-              currentQuestionIndex++;
-            });
-          });
-        });
       }
-
-      if (feedbackTimer != null && feedbackTimer!.isActive) {
-        feedbackTimer!.cancel();
-      }
-      setState(() {
-        feedbackMessage = '';
-      });
-    } else {
-      userResponses.add(answer);
-      currentQuestionIndex++;
     }
 
     if (currentQuestionIndex >= widget.questions.length) {
@@ -334,12 +317,13 @@ class _QuizzContentState extends State<QuizzContent> {
         isQuizzFinished = true;
         Navigator.pushReplacementNamed(context, PagesRoutes.congratulations);
       });
+    } else {
+      setState(() {});
     }
   }
 
   @override
   void dispose() {
-    feedbackTimer?.cancel();
     answerController.dispose();
     super.dispose();
   }
@@ -351,11 +335,6 @@ class _QuizzContentState extends State<QuizzContent> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Félicitations, vous avez terminé le quizz !',
-              style: TextStyle(fontSize: 24),
-              textAlign: TextAlign.center,
-            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -409,7 +388,6 @@ class _QuizzContentState extends State<QuizzContent> {
                 style: TextStyle(color: Color.fromARGB(255, 0, 53, 62)),
               )),
           const SizedBox(height: 20),
-          if (feedbackMessage.isNotEmpty) Text(feedbackMessage),
         ],
       );
     } else if (question is MultipleChoiceQuestion) {
@@ -519,6 +497,6 @@ class _QuizzContentState extends State<QuizzContent> {
       );
     }
 
-    return Container(); // Retourne un conteneur vide si le type de question n'est pas pris en charge
+    return Container();
   }
 }
