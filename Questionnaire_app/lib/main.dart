@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'QuizzData.dart';
@@ -6,6 +5,7 @@ import 'QuizzList.dart';
 import 'Quizz.dart' as quizzData;
 import 'PagesRoutes.dart';
 import 'CongratulationsPage.dart';
+import 'questionThemes.dart';
 
 void main() => runApp(
       MyApp(),
@@ -47,13 +47,13 @@ class MyApp extends StatelessWidget {
             title: const DefaultTextStyle(
               style: TextStyle(
                 fontSize: 40,
-                color: Colors.white,
+                color: Color.fromARGB(255, 0, 0, 0),
                 fontFamily: 'CoffeeCake',
               ),
               child: Text('Quizz App !'),
             ),
             centerTitle: true,
-            backgroundColor: const Color.fromARGB(255, 0, 53, 62),
+            backgroundColor: const Color.fromARGB(255, 255, 255, 255),
           ),
           body: SingleChildScrollView(
             child: Center(
@@ -82,15 +82,19 @@ class MyApp extends StatelessWidget {
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 15),
+                              horizontal: 35, vertical: 10),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 0, 53, 62),
-                              borderRadius: BorderRadius.circular(40),
-                              border: Border.all(
-                                style: BorderStyle.solid,
-                                color: const Color.fromARGB(255, 0, 35, 41),
-                              ),
+                              gradient:
+                                  questionThemes[i % questionThemes.length],
+                              borderRadius: BorderRadius.circular(90),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.3),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
                             ),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 12),
@@ -266,8 +270,10 @@ class QuizzGamePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(quizzName),
         titleTextStyle: const TextStyle(
-            fontSize: 28, color: Colors.white, fontFamily: 'CoffeeCake'),
-        backgroundColor: const Color.fromARGB(255, 0, 53, 62),
+            fontSize: 28,
+            color: Color.fromARGB(255, 0, 0, 0),
+            fontFamily: 'CoffeeCake'),
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       ),
       body: QuizzContent(questions: questions),
     );
@@ -343,7 +349,7 @@ class _QuizzContentState extends State<QuizzContent> {
                 backgroundColor: const Color.fromARGB(255, 255, 255, 255),
               ),
               child: const Text('Retour',
-                  style: TextStyle(color: Color.fromARGB(255, 0, 53, 62))),
+                  style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
             ),
           ],
         ),
@@ -359,9 +365,10 @@ class _QuizzContentState extends State<QuizzContent> {
           Text(
             question.text,
             style: const TextStyle(
-                fontSize: 24,
-                color: Color.fromARGB(255, 0, 53, 62),
-                fontWeight: FontWeight.w700),
+              fontSize: 24,
+              color: Color.fromARGB(255, 0, 53, 62),
+              fontWeight: FontWeight.w700,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
@@ -388,6 +395,18 @@ class _QuizzContentState extends State<QuizzContent> {
                 style: TextStyle(color: Color.fromARGB(255, 0, 53, 62)),
               )),
           const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+            ),
+            child: const Text(
+              'Retour',
+              style: TextStyle(color: Color.fromARGB(255, 0, 53, 62)),
+            ),
+          ),
         ],
       );
     } else if (question is MultipleChoiceQuestion) {
@@ -396,7 +415,11 @@ class _QuizzContentState extends State<QuizzContent> {
         children: [
           Text(
             question.text,
-            style: const TextStyle(fontSize: 24),
+            style: const TextStyle(
+              fontSize: 24,
+              color: Color.fromARGB(255, 0, 53, 62),
+              fontWeight: FontWeight.w700,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),

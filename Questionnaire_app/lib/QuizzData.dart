@@ -1,3 +1,5 @@
+import 'questionThemes.dart';
+
 class QuizzData {
   static List<Quizz> getQuizzList() {
     return [
@@ -67,6 +69,8 @@ class TextQuestion extends Question {
   final String correctAnswer;
 
   TextQuestion(this.text, this.correctAnswer);
+
+  get color => null;
 }
 
 class MultipleChoiceQuestion extends Question {
