@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CongratulationsPage extends StatelessWidget {
-  const CongratulationsPage(
-      {super.key, required Null Function() onReturnPressed});
+  final VoidCallback onReturnPressed;
+
+  CongratulationsPage({super.key, required this.onReturnPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -11,13 +12,13 @@ class CongratulationsPage extends StatelessWidget {
         title: const DefaultTextStyle(
           style: TextStyle(
             fontSize: 40,
-            color: Colors.white,
+            color: Color.fromARGB(255, 0, 0, 0),
             fontFamily: 'CoffeeCake',
           ),
           child: Text('Quizz App !'),
         ),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 0, 53, 62),
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -26,7 +27,7 @@ class CongratulationsPage extends StatelessWidget {
             'Félicitations, vous avez terminé le quizz !',
             style: TextStyle(
                 fontSize: 46,
-                color: Color.fromARGB(255, 0, 53, 62),
+                color: Color.fromARGB(255, 0, 0, 0),
                 fontWeight: FontWeight.w600),
             textAlign: TextAlign.center,
           ),
@@ -40,7 +41,7 @@ class CongratulationsPage extends StatelessWidget {
             child: const Text(
               'Retour',
               style: TextStyle(
-                color: Color.fromARGB(255, 0, 53, 62),
+                color: Color.fromARGB(255, 0, 0, 0),
               ),
             ),
           ),

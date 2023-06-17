@@ -14,6 +14,8 @@ void main() => runApp(
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
+  final int score = 0;
+
   final quizzList = <QuizzList>[
     QuizzList(
       name: 'Culture Geek : Star Wars',
@@ -90,7 +92,7 @@ class MyApp extends StatelessWidget {
                               borderRadius: BorderRadius.circular(90),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.3),
+                                  color: Colors.black.withOpacity(0.5),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 ),
@@ -143,6 +145,15 @@ class MyApp extends StatelessWidget {
                     "Kashyyk"),
                 TextQuestion("Quel est le nom complet de Dark Vador ?",
                     "Anakin Skywalker"),
+                TextQuestion(
+                    "Comment s'appelle le réalisateur original de Star Wars ?",
+                    "Georges Lucas"),
+                TextQuestion(
+                    "Quelles sont les créatures, vivant sur Endor, qui ont aidé les rebelles à vaincre la deuxième étoile de la mort ?",
+                    "Ewoks"),
+                TextQuestion(
+                    "Quelle est la planète d'origine d'Anakin Skywalker",
+                    "Tatooine"),
               ],
               onQuizzFinished: () {
                 Navigator.pushReplacementNamed(
@@ -165,14 +176,39 @@ class MyApp extends StatelessWidget {
                   "Jupiter",
                 ),
                 MultipleChoiceQuestion(
+                  "À quelle distance se trouve la Lune de la Terre ?",
+                  ["256 780 km", "384 400 km", "960 000 km", "456 789 km"],
+                  "384 400 km",
+                ),
+                MultipleChoiceQuestion(
                   "Quel est l'élément atomique le plus commun dans l'Univers ?",
                   ["Hélium", "Fer", "Oxygène", "Hydrogène"],
                   "Hydrogène",
                 ),
                 MultipleChoiceQuestion(
+                  "Comment se prénomme notre galaxie ?",
+                  [
+                    "La Voie Aisée",
+                    "Andromède",
+                    "La Voie Lactée",
+                    "Galaxie du Sombrero"
+                  ],
+                  "La Voie Lactée",
+                ),
+                MultipleChoiceQuestion(
                   "Quelle est la plus grande étoile connue dans l'univers ?",
-                  ["VY Canis Majoris", "Le Soleil", "Sirius", "Betelgeuse"],
+                  ["VY Canis Majoris", "Soleil", "Sirius", "Betelgeuse"],
                   "VY Canis Majoris",
+                ),
+                MultipleChoiceQuestion(
+                  "Quel est l'âge du Soleil ?",
+                  [
+                    "30 millions d'années",
+                    "4,6 milliards d'années",
+                    "450 millions d'années",
+                    "14,5 milliards d'années"
+                  ],
+                  "4,6 milliards d'années",
                 ),
                 MultipleChoiceQuestion(
                   "Quelle est la première personne à avoir marché sur la Lune ?",
@@ -238,9 +274,7 @@ class MyApp extends StatelessWidget {
               ],
               onQuizzFinished: () {
                 Navigator.pushReplacementNamed(
-                  context,
-                  PagesRoutes.congratulations,
-                );
+                    context, PagesRoutes.congratulations);
               },
             ),
         PagesRoutes.congratulations: (context) => CongratulationsPage(
@@ -321,7 +355,16 @@ class _QuizzContentState extends State<QuizzContent> {
 
       setState(() {
         isQuizzFinished = true;
-        Navigator.pushReplacementNamed(context, PagesRoutes.congratulations);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CongratulationsPage(
+              onReturnPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        );
       });
     } else {
       setState(() {});
@@ -366,7 +409,7 @@ class _QuizzContentState extends State<QuizzContent> {
             question.text,
             style: const TextStyle(
               fontSize: 24,
-              color: Color.fromARGB(255, 0, 53, 62),
+              color: Color.fromARGB(255, 0, 0, 0),
               fontWeight: FontWeight.w700,
             ),
             textAlign: TextAlign.center,
@@ -392,7 +435,7 @@ class _QuizzContentState extends State<QuizzContent> {
               ),
               child: const Text(
                 'Valider',
-                style: TextStyle(color: Color.fromARGB(255, 0, 53, 62)),
+                style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
               )),
           const SizedBox(height: 20),
           ElevatedButton(
@@ -404,7 +447,7 @@ class _QuizzContentState extends State<QuizzContent> {
             ),
             child: const Text(
               'Retour',
-              style: TextStyle(color: Color.fromARGB(255, 0, 53, 62)),
+              style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
             ),
           ),
         ],
@@ -417,7 +460,7 @@ class _QuizzContentState extends State<QuizzContent> {
             question.text,
             style: const TextStyle(
               fontSize: 24,
-              color: Color.fromARGB(255, 0, 53, 62),
+              color: Color.fromARGB(255, 0, 0, 0),
               fontWeight: FontWeight.w700,
             ),
             textAlign: TextAlign.center,
@@ -444,7 +487,7 @@ class _QuizzContentState extends State<QuizzContent> {
                       choice,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        color: Color.fromARGB(255, 0, 53, 62),
+                        color: Color.fromARGB(255, 0, 0, 0),
                       ),
                     ),
                   ),
@@ -462,7 +505,7 @@ class _QuizzContentState extends State<QuizzContent> {
             ),
             child: const Text(
               'Retour',
-              style: TextStyle(color: Color.fromARGB(255, 0, 53, 62)),
+              style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
             ),
           ),
         ],
@@ -497,8 +540,8 @@ class _QuizzContentState extends State<QuizzContent> {
                     child: Text(
                       choice,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          color: Color.fromARGB(255, 0, 53, 62)),
+                      style:
+                          const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                     ),
                   ),
                 ),
@@ -514,7 +557,7 @@ class _QuizzContentState extends State<QuizzContent> {
               backgroundColor: const Color.fromARGB(255, 255, 255, 255),
             ),
             child: const Text('Retour',
-                style: TextStyle(color: Color.fromARGB(255, 0, 53, 62))),
+                style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
           ),
         ],
       );
